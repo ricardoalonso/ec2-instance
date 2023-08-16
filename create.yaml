@@ -21,10 +21,11 @@
     block: 
       - name: Launch ec2 instances
         ec2_instance:
+          name: "{{ instance_name }}"
           region: us-east-1
           key_name: ralonsokey
           instance_type: t2.small
-          image_id: ami-0c45afe2ce9bc14de
+          image_id: "{{ image_id }}"
           wait: yes
           tags:
             Environment: dev
