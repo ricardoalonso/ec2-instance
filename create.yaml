@@ -4,6 +4,9 @@
   gather_facts: false
   collections:
   - amazon.aws
+  module_defaults:
+    group/aws:
+      region: us-east-1
   tasks:
   # Block is a Group of Tasks combined together
   - name: Get Info Block
