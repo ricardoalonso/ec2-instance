@@ -21,7 +21,7 @@
     block: 
       - name: Launch ec2 instances
         tags: create_ec2
-        ec2:
+        ec2_instance:
           region: us-east-1
           key_name: ralonsokey
           group: app_sec_group
