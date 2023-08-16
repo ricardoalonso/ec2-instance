@@ -1,0 +1,54 @@
+---
+- name: Create Ec2 instances
+  hosts: localhost
+  gather_facts: false
+  collections:
+  - amazon.aws
+  tasks:
+  - name: create key
+    ec2_key:
+      name: ralonsokey
+      key_material: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDn30BJnMRhfhzebfo6CUaQsZl0hwNxFkyhnBqsKT/Ut5o0wElhXYKvHpSOSsG/YKlJLclWUqwHpEIGJ87iNpaAYz98IwaG6LuS4KT/bam9qCPo7jNT2Z9v6z/9gUk1nLvpA8I5hgW5oe08YzGbVHbGW1cRqiaoWIsnbvqlfjeM6leU/MbOcRVDTShXol8J+mjhCgL7GvGSqzGI9oDjyUyF0dGZnFVo3ZjpUUlvKGHF7vU/OMBJ2pwHtPJqwyJw457gVB6Nxj+dLSUMUBE1yEiJ478E9L0fEL3wAamKGYnsj4lPQQLTjM7TvCgiDApRdPqbqujnNgjwgDynowy9wI4J ricardo.alonso@ricardoalonso.com'
+  # Block is a Group of Tasks combined together
+  - name: Get Info Block
+    block: 
+      - name: Get Running instance Info
+        ec2_instance_info:
+        register: ec2info 
+      - name: Print info
+        debug: var="ec2info.instances"
+             
+  - name: Create EC2 Block
+    block: 
+      - name: Launch ec2 instances
+        tags: create_ec2
+        ec2:
+          region: us-east-1
+          key_name: ralonsokey
+          group: app_sec_group
+          instance_type: t2.small
+          image: ami-0c45afe2ce9bc14de
+          wait: yes
+          wait_timeout: 500
+          count: 1
+          instance_tags:
+            name: appservers
+            os: ubuntu
+          monitoring: no
+          vpc_subnet_id: subnet-0249d1541f0b2dc6d
+          assign_public_ip: yes
+        register: ec2
+        delegate_to: localhost
+      - name : Add instance to host group
+        add_host:
+          hostname: "{{ item.public_ip }}"
+          groupname: launched
+        loop: "{{ ec2.instances }}"
+      - name: Wait for SSH to come up
+        local_action:
+          module: wait_for
+          host: "{{ item.public_ip }}"
+          port: 22
+          delay: 10
+          timeout: 120
+        loop: "{{ ec2.instances }}"
