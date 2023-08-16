@@ -47,5 +47,5 @@
         loop: "{{ ec2.instances }}"
       - name: print public ip
         debug:
-          msg: "Instance IP: {{ item.public_ip }}"
+          msg: "Instance IP: {{ item.public_ip_address }}"
         loop: "{{ ec2.instances }}"
