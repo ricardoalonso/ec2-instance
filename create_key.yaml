@@ -7,4 +7,5 @@
   - name: create key
     ec2_key:
       name: ralonsokey
+      region: us-east-1
       key_material: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDn30BJnMRhfhzebfo6CUaQsZl0hwNxFkyhnBqsKT/Ut5o0wElhXYKvHpSOSsG/YKlJLclWUqwHpEIGJ87iNpaAYz98IwaG6LuS4KT/bam9qCPo7jNT2Z9v6z/9gUk1nLvpA8I5hgW5oe08YzGbVHbGW1cRqiaoWIsnbvqlfjeM6leU/MbOcRVDTShXol8J+mjhCgL7GvGSqzGI9oDjyUyF0dGZnFVo3ZjpUUlvKGHF7vU/OMBJ2pwHtPJqwyJw457gVB6Nxj+dLSUMUBE1yEiJ478E9L0fEL3wAamKGYnsj4lPQQLTjM7TvCgiDApRdPqbqujnNgjwgDynowy9wI4J ricardo.alonso@ricardoalonso.com'
