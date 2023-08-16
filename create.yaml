@@ -24,25 +24,17 @@
         ec2_instance:
           region: us-east-1
           key_name: ralonsokey
-          group: app_sec_group
           instance_type: t2.small
           image_id: ami-0c45afe2ce9bc14de
           wait: yes
           wait_timeout: 500
           count: 1
-          instance_tags:
-            name: appservers
-            os: ubuntu
-          monitoring: no
+          security_group: default
           vpc_subnet_id: subnet-0249d1541f0b2dc6d
-          assign_public_ip: yes
+          network:
+            assign_public_ip: yes
         register: ec2
         delegate_to: localhost
-      - name : Add instance to host group
-        add_host:
-          hostname: "{{ item.public_ip }}"
-          groupname: launched
-        loop: "{{ ec2.instances }}"
       - name: Wait for SSH to come up
         local_action:
           module: wait_for
